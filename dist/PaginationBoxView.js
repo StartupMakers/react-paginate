@@ -33,6 +33,7 @@ var PaginationBoxView = (function (_Component) {
     key: 'propTypes',
     value: {
       pageNum: _react.PropTypes.number.isRequired,
+      pageUrlTemplate: _react.PropTypes.string.isRequired,
       pageRangeDisplayed: _react.PropTypes.number.isRequired,
       marginPagesDisplayed: _react.PropTypes.number.isRequired,
       previousLabel: _react.PropTypes.node,
@@ -57,6 +58,7 @@ var PaginationBoxView = (function (_Component) {
     key: 'defaultProps',
     value: {
       pageNum: 10,
+      pageUrlTemplate: '#',
       pageRangeDisplayed: 2,
       marginPagesDisplayed: 3,
       activeClassName: "selected",
@@ -124,11 +126,17 @@ var PaginationBoxView = (function (_Component) {
   }, {
     key: 'render',
     value: function render() {
-      var disabled = this.props.disabledClassName;
+      var selected = this.state.selected;
+      var pageUrlTemplate = this.props.pageUrlTemplate;
 
-      var previousClasses = (0, _classnames2['default'])(this.props.previousClassName, { disabled: this.state.selected === 0 });
+      var disableGoNext = selected === this.props.pageNum - 1;
+      var disableGoPrevious = selected === 0;
 
-      var nextClasses = (0, _classnames2['default'])(this.props.nextClassName, { disabled: this.state.selected === this.props.pageNum - 1 });
+      var nextPageUrl = disableGoNext ? '#' : pageUrlTemplate.replace(':pageNum', selected + 2);
+      var previousPageUrl = disableGoPrevious ? '#' : pageUrlTemplate.replace(':pageNum', selected);
+
+      var previousClasses = (0, _classnames2['default'])(this.props.previousClassName, { disabled: disableGoPrevious });
+      var nextClasses = (0, _classnames2['default'])(this.props.nextClassName, { disabled: disableGoNext });
 
       return _react2['default'].createElement(
         'ul',
@@ -138,11 +146,12 @@ var PaginationBoxView = (function (_Component) {
           { onClick: this.handlePreviousPage, className: previousClasses },
           _react2['default'].createElement(
             'a',
-            { href: '', className: this.props.previousLinkClassName },
+            { href: previousPageUrl, className: this.props.previousLinkClassName },
             this.props.previousLabel
           )
         ),
         _react2['default'].createElement(_PaginationListView2['default'], {
+          pageUrlTemplate: pageUrlTemplate,
           onPageSelected: this.handlePageSelected,
           selected: this.state.selected,
           pageNum: this.props.pageNum,
@@ -159,7 +168,7 @@ var PaginationBoxView = (function (_Component) {
           { onClick: this.handleNextPage, className: nextClasses },
           _react2['default'].createElement(
             'a',
-            { href: '', className: this.props.nextLinkClassName },
+            { href: nextPageUrl, className: this.props.nextLinkClassName },
             this.props.nextLabel
           )
         )

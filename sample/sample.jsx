@@ -72,6 +72,7 @@ export class App extends Component {
         <CommentList data={this.state.data} />
         <ReactPaginate previousLabel={"previous"}
                        nextLabel={"next"}
+                       pageUrlTemplate="/page/:pageNum"
                        breakLabel={<li className="break"><a href="">...</a></li>}
                        pageNum={this.state.pageNum}
                        marginPagesDisplayed={2}

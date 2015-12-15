@@ -7,18 +7,28 @@ import PageView from './PageView';
 
 export default class PaginationListView extends Component {
   render() {
+    const pageUrlTemplate = this.props.pageUrlTemplate;
     let items = {};
 
     if (this.props.pageNum <= this.props.pageRangeDisplayed) {
 
-      for (let index = 0; index < this.props.pageNum; index++) {
+      let index;
+      let page;
+      let url;
+
+      for (index = 0; index < this.props.pageNum; index++) {
+
+        page = index + 1;
+        url = pageUrlTemplate.replace(':pageNum', page);
+
         items['key' + index] = <PageView
           onClick={this.props.onPageSelected.bind(null, index)}
           selected={this.props.selected === index}
           pageClassName={this.props.pageClassName}
           pageLinkClassName={this.props.pageLinkClassName}
           activeClassName={this.props.activeClassName}
-          page={index + 1} />
+          page={page}
+          href={url} />
       }
 
     } else {
@@ -37,10 +47,12 @@ export default class PaginationListView extends Component {
 
       let index;
       let page;
+      let url;
 
       for (index = 0; index < this.props.pageNum; index++) {
 
         page = index + 1;
+        url = pageUrlTemplate.replace(':pageNum', page);
 
         let pageView = (
           <PageView
@@ -49,7 +61,8 @@ export default class PaginationListView extends Component {
             pageClassName={this.props.pageClassName}
             pageLinkClassName={this.props.pageLinkClassName}
             activeClassName={this.props.activeClassName}
-            page={index + 1} />
+            page={page}
+            href={url} />
         );
 
         if (page <= this.props.marginPagesDisplayed) {

@@ -38,18 +38,28 @@ var PaginationListView = (function (_Component) {
   _createClass(PaginationListView, [{
     key: 'render',
     value: function render() {
+      var pageUrlTemplate = this.props.pageUrlTemplate;
       var items = {};
 
       if (this.props.pageNum <= this.props.pageRangeDisplayed) {
 
-        for (var index = 0; index < this.props.pageNum; index++) {
+        var index = undefined;
+        var page = undefined;
+        var url = undefined;
+
+        for (index = 0; index < this.props.pageNum; index++) {
+
+          page = index + 1;
+          url = pageUrlTemplate.replace(':pageNum', page);
+
           items['key' + index] = _react2['default'].createElement(_PageView2['default'], {
             onClick: this.props.onPageSelected.bind(null, index),
             selected: this.props.selected === index,
             pageClassName: this.props.pageClassName,
             pageLinkClassName: this.props.pageLinkClassName,
             activeClassName: this.props.activeClassName,
-            page: index + 1 });
+            page: page,
+            href: url });
         }
       } else {
 
@@ -66,10 +76,12 @@ var PaginationListView = (function (_Component) {
 
         var index = undefined;
         var page = undefined;
+        var url = undefined;
 
         for (index = 0; index < this.props.pageNum; index++) {
 
           page = index + 1;
+          url = pageUrlTemplate.replace(':pageNum', page);
 
           var pageView = _react2['default'].createElement(_PageView2['default'], {
             onClick: this.props.onPageSelected.bind(null, index),
@@ -77,7 +89,8 @@ var PaginationListView = (function (_Component) {
             pageClassName: this.props.pageClassName,
             pageLinkClassName: this.props.pageLinkClassName,
             activeClassName: this.props.activeClassName,
-            page: index + 1 });
+            page: page,
+            href: url });
 
           if (page <= this.props.marginPagesDisplayed) {
             items['key' + index] = pageView;
