@@ -80,7 +80,10 @@ export default class PaginationBoxView extends Component {
     this.setState({selected: selected});
 
     // Call the callback with the new selected item:
-    this.callCallback(selected);
+    const result = this.callCallback(selected);
+    if (typeof result === 'number') {
+      this.setState({selected: result});
+    }
   }
 
   callCallback = (selectedItem) => {
