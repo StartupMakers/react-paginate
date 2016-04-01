@@ -100,16 +100,16 @@ var PaginationBoxView = (function (_Component) {
 
       _this.setState({ selected: selected });
 
-      // Call the callback with the new selected item:
-      var result = _this.callCallback(selected);
-      if (typeof result === 'number') {
-        _this.setState({ selected: result });
-      }
+      // Call the callback with the new selected item
+      _this.callCallback(selected);
     };
 
     this.callCallback = function (selectedItem) {
       if (typeof _this.props.clickCallback !== "undefined" && typeof _this.props.clickCallback === "function") {
-        _this.props.clickCallback({ selected: selectedItem });
+        var result = _this.props.clickCallback({ selected: selectedItem });
+        if (typeof result === 'number') {
+          _this.setState({ selected: result });
+        }
       }
     };
 
