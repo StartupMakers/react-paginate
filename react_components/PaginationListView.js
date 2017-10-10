@@ -6,29 +6,38 @@ import PageView from './PageView';
 
 
 export default class PaginationListView extends Component {
+  renderPageView(index) {
+    const {
+      pageUrlTemplate,
+      pageClassName,
+      pageLinkClassName,
+      activeClassName,
+      onPageSelected,
+      selected,
+    } = this.props;
+    const page = index + 1;
+    const url = pageUrlTemplate.replace(':pageNum', page);
+
+    return (
+      <PageView
+        onClick={onPageSelected.bind(null, index)}
+        selected={selected === index}
+        pageClassName={pageClassName}
+        pageLinkClassName={pageLinkClassName}
+        activeClassName={activeClassName}
+        page={page}
+        href={url} />
+    );
+  }
   render() {
-    const pageUrlTemplate = this.props.pageUrlTemplate;
-    let items = {};
+    const items = {};
 
     if (this.props.pageNum <= this.props.pageRangeDisplayed) {
 
-      let index;
-      let page;
-      let url;
+      for (let index = 0; index < this.props.pageNum; index++) {
 
-      for (index = 0; index < this.props.pageNum; index++) {
+        items['key' + index] = this.renderPageView(index);
 
-        page = index + 1;
-        url = pageUrlTemplate.replace(':pageNum', page);
-
-        items['key' + index] = <PageView
-          onClick={this.props.onPageSelected.bind(null, index)}
-          selected={this.props.selected === index}
-          pageClassName={this.props.pageClassName}
-          pageLinkClassName={this.props.pageLinkClassName}
-          activeClassName={this.props.activeClassName}
-          page={page}
-          href={url} />
       }
 
     } else {
@@ -45,38 +54,22 @@ export default class PaginationListView extends Component {
         rightSide = this.props.pageRangeDisplayed - leftSide;
       }
 
-      let index;
-      let page;
-      let url;
+      for (let index = 0; index < this.props.pageNum; index++) {
 
-      for (index = 0; index < this.props.pageNum; index++) {
-
-        page = index + 1;
-        url = pageUrlTemplate.replace(':pageNum', page);
-
-        let pageView = (
-          <PageView
-            onClick={this.props.onPageSelected.bind(null, index)}
-            selected={this.props.selected === index}
-            pageClassName={this.props.pageClassName}
-            pageLinkClassName={this.props.pageLinkClassName}
-            activeClassName={this.props.activeClassName}
-            page={page}
-            href={url} />
-        );
+        const page = index + 1;
 
         if (page <= this.props.marginPagesDisplayed) {
-          items['key' + index] = pageView;
+          items['key' + index] = this.renderPageView(index);
           continue;
         }
 
         if (page > this.props.pageNum - this.props.marginPagesDisplayed) {
-          items['key' + index] = pageView;
+          items['key' + index] = this.renderPageView(index);
           continue;
         }
 
         if ((index >= this.props.selected - leftSide) && (index <= this.props.selected + rightSide)) {
-          items['key' + index] = pageView;
+          items['key' + index] = this.renderPageView(index);
           continue;
         }
 
